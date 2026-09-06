@@ -83,12 +83,12 @@ jobs:
         run: |
           docker build \
             --build-arg=REACT_APP_MOVIE_API_URL="${{ secrets.REACT_APP_MOVIE_API_URL }}" \
-            --tag="${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}" \
+            --tag="${{ secrets.FRONTEND_ECR_REPOSITORY }}:${{ github.sha }}" \
             .
 
       - name: Push Docker image
         run: |
-          docker push "${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}"
+          docker push "${{ secrets.FRONTEND_ECR_REPOSITORY }}:${{ github.sha }}"
 
   deploy:
     name: Deploy
@@ -120,7 +120,7 @@ jobs:
         working-directory: starter/frontend/k8s
         run: |
           kustomize edit set image \
-            frontend="${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}"
+            frontend="${{ secrets.FRONTEND_ECR_REPOSITORY }}:${{ github.sha }}"
 
       - name: Deploy to Kubernetes
         working-directory: starter/frontend/k8s
